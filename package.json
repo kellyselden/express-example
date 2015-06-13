@@ -1,0 +1,24 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kelly Selden <kellyselden@gmail.com> (https://github.com/kellyselden)",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.0.0",
+    "express": "^4.0.0",
+    "express-session": "^1.0.0",
+    "mongoose": "~3.8.0",
+    "passport": "^0.2.0",
+    "passport-facebook": "^2.0.0",
+    "passport-github": "^0.1.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.11.0",
+    "socket.io": "^1.0.0"
+  }
+}
