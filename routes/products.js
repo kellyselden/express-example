@@ -1,4 +1,5 @@
 var express = require('express');
+var url = require('url');
 var Product = require('../models/product');
 
 var router = express.Router();
@@ -10,7 +11,11 @@ function deleteVersion(product) {
 }
 
 router.get('/', function(req, res) {
-  return Product.find(function(err, products) {
+  var criteria = {};
+  var search = url.parse(req.url, true).query['search'];
+  if (search)
+    criteria['name'] = new RegExp(search, 'i');
+  return Product.find(criteria, function(err, products) {
     if (err) return console.error(err);
     return res.send({
       products: products.map(deleteVersion)
