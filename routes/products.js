@@ -23,7 +23,9 @@ router.get('/', function(req, res) {
     var page = query['page'] || 0;
     var startIndex = page * pageSize;
     return res.send({
-      products: products.slice(startIndex, startIndex + pageSize).map(deleteVersion),
+      products: products.sort(function(a, b) {
+        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
+      }).slice(startIndex, startIndex + pageSize).map(deleteVersion),
       meta: {
         count: products.length
       }
