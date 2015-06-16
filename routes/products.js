@@ -10,15 +10,23 @@ function deleteVersion(product) {
   return product;
 }
 
+var pageSize = 10;
+
 router.get('/', function(req, res) {
   var criteria = {};
-  var search = url.parse(req.url, true).query['search'];
+  var query = url.parse(req.url, true).query;
+  var search = query['search'];
   if (search)
     criteria['name'] = new RegExp(search, 'i');
   return Product.find(criteria, function(err, products) {
     if (err) return console.error(err);
+    var page = query['page'] || 0;
+    var startIndex = page * pageSize;
     return res.send({
-      products: products.map(deleteVersion)
+      products: products.slice(startIndex, startIndex + pageSize).map(deleteVersion),
+      meta: {
+        count: products.length
+      }
     });
   });
 });
