@@ -10,8 +10,6 @@ function deleteVersion(product) {
   return product;
 }
 
-var pageSize = 10;
-
 router.get('/', function(req, res) {
   var criteria = {};
   var query = url.parse(req.url, true).query;
@@ -20,14 +18,18 @@ router.get('/', function(req, res) {
     criteria['name'] = new RegExp(search, 'i');
   return Product.find(criteria, function(err, products) {
     if (err) return console.error(err);
-    var page = query['page'] || 0;
+    var page = (parseInt(query['page'], 10) || 1) - 1;
+    var pageSize = parseInt(query['per_page'], 10) || 10;
     var startIndex = page * pageSize;
+    var count = products.length;
+    products = products.sort(function(a, b) {
+      return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
+    }).slice(startIndex, startIndex + pageSize);
     return res.send({
-      products: products.sort(function(a, b) {
-        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
-      }).slice(startIndex, startIndex + pageSize).map(deleteVersion),
+      products: products.map(deleteVersion),
       meta: {
-        count: products.length
+        count: count,
+        total_pages: Math.ceil(count / pageSize)
       }
     });
   });
